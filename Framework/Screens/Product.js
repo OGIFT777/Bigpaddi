@@ -1,84 +1,94 @@
-import { faLess } from "@fortawesome/free-brands-svg-icons";
-import { height, width } from "@fortawesome/free-brands-svg-icons/fa42Group";
-import { ScrollView, View,SafeAreaView,Image,Text,TouchableOpacity } from "react-native";
-import { Theme } from "../Components/Theme";
+import { ScrollView, View, SafeAreaView, Image, Text, TouchableOpacity } from "react-native";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
-import { AppBotton } from "../Components/AppBotton";
+import { AppBotton } from "../Components/AppBotton";  
+import { Theme } from "../Components/Theme";
+import { LinearGradient } from 'expo-linear-gradient';
+import GradientText from '../Components/GradientText'; 
 
-export  function ProductA(){
-    const [Price, setPrice]= useState('10,000')
-    const [size, setSize]= useState('10')
-    const [color, setColor]= useState('Black')
-    const [name, setName]=useState('Jacket')
+
+
+export function ProductA() {
+    const [Price, setPrice] = useState('#10,000');
+    const [size, setSize] = useState('10');
+    const [color, setColor] = useState('Black');
+    const [name, setName] = useState('Jacket');
+    
 
     const handleAddToCart = () => {
         alert(`${name} has been added to your cart!`);
-      }
+    }
 
     return (
-        <SafeAreaView style={{flex:1,backgroundColor:'#8000804d',}}>
+      
 
-<View style={{ flex: 1, justifyContent: 'space-between' }}>
-<ScrollView>
+      <LinearGradient
+            colors={['gold', '#4B0082']} 
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={{flex:1}}
+        >
+      
+        <SafeAreaView style={{ flex: 1 }}>
+            <ScrollView style={{ flex: 1 }}>
 
-
-     <View style={{width:"100%",height:400,flexDirection:'column',justifyContent:'space-between'}}>
-        <View style={{alignItems:'center'}}>
-     <Text style={{ fontFamily: Theme.fonts.text900, fontSize:30,color:Theme.colors.primary}}>{name}</Text>
-
-     <Text style={{ fontFamily: Theme.fonts.text400, fontSize:20,color:"purple"}}> Elevate Your Style with Our Sleek Jacket</Text>
-</View>
-
-<View style={{height:400}}>
-<ScrollView horizontal style={{}}>
-
-   <Image source={require("../../assets/jacket.jpg")} style={{ width:400, height:400,}}/>
-
-   <Image source={require("../../assets/jacket.jpg")} style={{ width:400, height:400,}}/>
-
-   <Image source={require("../../assets/jacket.jpg")} style={{ width:400, height:400,}}/>
-  
-               </ScrollView>
-                </View>
-
-    <View style={{backgroundColor:'white', width:"100%",height:70,marginTop:3,}}>
-        <View style={{height:70, width:"100%", borderRadius:5,backgroundColor:"white"}}>
-   
-   <View style={{flexDirection:'row'}}>
-    <Text style={{fontSize:20,color:'#000000'}}>Price:</Text>
-    <Text style={{fontFamily:Theme.fonts.text900,fontSize:20,color:Theme.colors.primary}}>{Price}</Text>
-    </View>
-
-    <View style={{flexDirection:'row'}}>
-    <Text style={{fontSize:20,color:'#000000'}}>Color:</Text>
-    <Text style={{fontFamily:Theme.fonts.text900,fontSize:20,color:'black'}}>{color}</Text>
-    </View>
-
-    <View style={{flexDirection:'row'}}>
-    <Text style={{fontSize:20,color:'#000000'}}>Size:</Text>
-    <Text style={{fontFamily:Theme.fonts.text900,fontSize:20,color:Theme.colors.primary}}>{size}</Text>
-    </View>
-
-    
-
-   </View>
-    </View>
-    <Text style={{fontSize:20,fontFamily:Theme.fonts.text600}}> Discover the perfect blend of sophistication and
-         versatility with our sleek black jacket. Crafted from premium, durable fabric,
-          this jacket promises to be a timeless addition to your wardrobe. Its tailored fit enhances your
-           silhouette, while the smooth finish adds a touch of modern elegance.</Text>
-
-
-
-
-</View></ScrollView>
-               <AppBotton onPress={handleAddToCart}>  Add to Cart</AppBotton>
+                <View style={{ padding: 20 }}>
+                <GradientText colors={['#800080', '#4B0082']} style={{ fontSize: 30 }}>
+                   <Text style={{color:'white'}}> {name}</Text>
+                </GradientText>                 
+                   <Text style={{ fontFamily: Theme.fonts.text400, fontSize: 20, color: "white" }}>Elevate Your Style with Our Sleek Jacket</Text>
                 </View>
 
 
-        </SafeAreaView>
-    )
+                <View style={{ height: 300}}>
+                    <ScrollView horizontal>
+                        <Image source={require("../../assets/jacket.jpg")} style={{ width: 300, height: 300, marginRight: 10,borderRadius:10 }} />
+                        <Image source={require("../../assets/jacket.jpg")} style={{ width: 300, height: 300, marginRight: 10,borderRadius:10 }} />
+                        <Image source={require("../../assets/jacket.jpg")} style={{ width: 300, height: 300, marginRight: 10 ,borderRadius:10}} />
+                    </ScrollView>
+                </View>
+
+
+                <View style={{ padding: 20 }}>
+                <View style={{borderRadius:5,margin:1}}>
+                <GradientText colors={['gold', '#4B0082']}>
+                       <Text style={{color:'white'}}> Discover the perfect blend of sophistication and versatility with our sleek black jacket. Crafted from premium, durable fabric, this jacket promises to be a timeless addition to your wardrobe.
+                        </Text></GradientText>                 
+                    </View>
+
+                    <View style={{ marginTop: 20 }}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <Text style={{ fontSize: 25 }}>Price:</Text>
+                            <Text style={{ fontSize: 25, fontFamily: Theme.fonts.text900, color: Theme.colors.primary }}>{Price}</Text>
+                        </View>
+
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
+                            <Text style={{ fontSize: 20 }}>Color:</Text>
+                            <Text style={{ fontSize: 20, fontFamily: Theme.fonts.text900 }}>{color}</Text>
+                        </View>
+
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
+                            <Text style={{ fontSize: 20 }}>Size:</Text>
+                            <Text style={{ fontSize: 20, fontFamily: Theme.fonts.text900 }}>{size}</Text>
+                        </View>
+                    </View>
+                </View>
+            </ScrollView>
+
+
+            <TouchableOpacity onPress={handleAddToCart} style={{ borderRadius: 20 }}>
+    <LinearGradient
+        colors={['#800080', '#4B0082',"blue"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={{ padding: 20, alignItems: 'center', borderRadius: 20 }}
+    >
+        <Text style={{ color: '#fff', fontSize: 20 }}>Add to Cart</Text>
+    </LinearGradient>
+</TouchableOpacity>
+        </SafeAreaView></LinearGradient>
+    );
 }
+
 export default ProductA;
