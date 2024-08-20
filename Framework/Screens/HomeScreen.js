@@ -24,7 +24,7 @@ function Home({navigation}) {
 const styles = StyleSheet.create({});
 
 const Tab = createBottomTabNavigator();
-export function HomeScreen() {
+export function HomeScreen(navigation) {
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({

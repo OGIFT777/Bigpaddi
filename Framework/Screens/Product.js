@@ -5,6 +5,7 @@ import { Theme } from "../Components/Theme";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import { AppBotton } from "../Components/AppBotton";
 
 export  function ProductA(){
     const [Price, setPrice]= useState('10,000')
@@ -73,14 +74,7 @@ export  function ProductA(){
 
 
 </View></ScrollView>
-<TouchableOpacity onPress={handleAddToCart}>
-                <View style={{alignItems:'center',width:'99%',backgroundColor:'#8000804d',height:58,margin:1,borderRadius:5,borderWidth:1,borderColor:'white'}}>
-                  <FontAwesomeIcon icon={faCartShopping} size={30} style={{color:Theme.colors.primary}}/>
-                  <Text style={{fontFamily:Theme.fonts.text800,fontSize:25, color:Theme.colors.primary}}> Add to Cart</Text>
-                </View>
-
-              
-               </TouchableOpacity>
+               <AppBotton onPress={handleAddToCart}>  Add to Cart</AppBotton>
                 </View>
 
 
