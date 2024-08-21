@@ -24,7 +24,7 @@ export function ProductA() {
       
 
       <LinearGradient
-            colors={['gold', '#4B0082']} 
+            colors={['#ffffff', '#ffffff']} 
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={{flex:1}}
@@ -37,7 +37,7 @@ export function ProductA() {
                 <GradientText colors={['#800080', '#4B0082']} style={{ fontSize: 30 }}>
                    <Text style={{color:'white'}}> {name}</Text>
                 </GradientText>                 
-                   <Text style={{ fontFamily: Theme.fonts.text400, fontSize: 20, color: "white" }}>Elevate Your Style with Our Sleek Jacket</Text>
+                   <Text style={{ fontFamily: Theme.fonts.text400, fontSize: 20, color: "black" }}>Elevate Your Style with Our Sleek Jacket</Text>
                 </View>
 
 
@@ -50,10 +50,10 @@ export function ProductA() {
                 </View>
 
 
-                <View style={{ padding: 20 }}>
+                <View style={{ padding: 10 }}>
                 <View style={{borderRadius:5,margin:1}}>
-                <GradientText colors={['gold', '#4B0082']}>
-                       <Text style={{color:'white'}}> Discover the perfect blend of sophistication and versatility with our sleek black jacket. Crafted from premium, durable fabric, this jacket promises to be a timeless addition to your wardrobe.
+                <GradientText colors={['#ffffff', '#ffffff']}>
+                       <Text style={{color:'black'}}> Discover the perfect blend of sophistication and versatility with our sleek black jacket. Crafted from premium, durable fabric, this jacket promises to be a timeless addition to your wardrobe.
                         </Text></GradientText>                 
                     </View>
 
