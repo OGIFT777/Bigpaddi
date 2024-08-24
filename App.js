@@ -16,6 +16,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { StackNavigator } from "./Framework/navigation/stackNavigator";
 import { View } from "react-native";
 import ProductA from "./Framework/Screens/Product";
+import { AppProvider } from "./Framework/Components/GlobalVariables";
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
 
@@ -32,7 +33,7 @@ export default function App() {
         await Font.loadAsync({ Montserrat_700Bold });
         await Font.loadAsync({ Montserrat_800ExtraBold });
         await Font.loadAsync({ Montserrat_900Black });
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise(resolve => setTimeout(resolve, 3000));
       } catch (e) {
         console.warn(e);
       } finally {
@@ -55,9 +56,11 @@ export default function App() {
 
   return (
     <RootSiblingParent>
+<AppProvider>
       <NavigationContainer>
       <StackNavigator/>
       </NavigationContainer>
+      </AppProvider>
     </RootSiblingParent>
     // <View style={{ flex: 1 }}>
     //   <ProductA />
