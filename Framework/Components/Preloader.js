@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View, } from 'react-native';
 import AnimatedLottieView from 'lottie-react-native';
-import { AppContext } from '../../global/globalVariables';
+import { AppContext } from './GlobalVariables';
 
 export function Preloader() {
     const { preloader } = useContext(AppContext);
@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#f9f4f4c4',
+        backgroundColor: '#23183c83',
         zIndex: 2
     },
 });

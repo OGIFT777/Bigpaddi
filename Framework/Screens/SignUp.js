@@ -8,7 +8,10 @@ import { faUserEdit } from "@fortawesome/free-solid-svg-icons/faUserEdit";
 import { Formik } from "formik";
 import * as yup from "yup"
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { authentication } from "../FireBase/Settings";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { AppContext } from "../Components/GlobalVariables";
+import { useContext } from "react";
+import { authentication, db } from "../FireBase/Settings";
 
 const validation = yup.object({
     fname: yup.string().min(3).max(15).required(),
@@ -19,11 +22,12 @@ const validation = yup.object({
 })
 
 export function Signup({ navigation }) {
+    const { setUserInfo, setPreloader, setUserUID } = useContext(AppContext)
+
     return (
         <ImageBackground source={require("../../assets/Logimage2.jpg")} style={{ height: '100%', width: '100%' }}>
             <SafeAreaView style={styles.overlay}>
                 <ScrollView>
-
 
                     <View style={{ padding: 30, marginTop: 10, alignSelf: 'center', backgroundColor: "#6E3DEB", borderRadius: 50 }}>
                         <FontAwesomeIcon icon={faUserEdit} size={50} color="white" />
@@ -36,13 +40,32 @@ export function Signup({ navigation }) {
                     <Formik
                         initialValues={{ fname: "", lname: "", phone: "", email: "", password: "" }}
                         onSubmit={(values) => {
-                            // // console.log(values);
-                            createUserWithEmailAndPassword(authentication,values.email,values.password)
-                            .then(data=>{
-                                const{ uid } = data.user
-                                navigation.replace('HomeScreen')
-                            })
-                            .catch(e=>console.log(e))
+                            // console.log(values);
+                            setPreloader(true)
+                            createUserWithEmailAndPassword(authentication, values.email, values.password)
+                                .then(data => {
+                                    const { uid } = data.user
+                                    setUserUID(uid)
+                                    setDoc(doc(db, "users", uid), {
+                                        firstname: values.fname,
+                                        lastname: values.lname,
+                                        phone: values.phone,
+                                        email: values.email,
+                                        profileImage: null,
+                                        wallet: 0,
+                                        cart: [],
+                                        active: true
+                                    })
+                                        .then(() => {
+                                            setPreloader(false)
+                                            navigation.replace("HomeScreen")
+                                        })
+                                        .catch(e => {
+                                            setPreloader(false)
+                                            console.log(e)
+                                        })
+                                })
+                                .catch(e => console.log(e))
                         }}
                         validationSchema={validation}
                     >
