@@ -1,11 +1,11 @@
 import { faUserCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { View, Text, ImageBackground, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import { View, Text, ImageBackground, TouchableOpacity, StyleSheet, ScrollView, Alert } from "react-native";
 import { TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AppBotton } from "../Components/AppBotton";
 import { faUserEdit } from "@fortawesome/free-solid-svg-icons/faUserEdit";
-import { Formik } from "formik";
+import { ErrorMessage, Formik } from "formik";
 import * as yup from "yup"
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
@@ -63,6 +63,11 @@ export function Signup({ navigation }) {
                                         .catch(e => {
                                             setPreloader(false)
                                             console.log(e)
+                                            Alert.alert(
+                                                'Error!',
+                                                ErrorMessage(e.code),
+                                                [{text:'Try again'}]
+                                            )
                                         })
                                 })
                                 .catch(e => console.log(e))

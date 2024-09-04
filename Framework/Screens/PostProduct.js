@@ -13,7 +13,7 @@ import { db } from '../FireBase/Settings';
 
 
 export function PostProduct({ navigation }) {
-    const { setUserInfo, setPreloader, userUID } = useContext(AppContext)
+    const { userInfo, setPreloader, userUID } = useContext(AppContext)
 
     const [title, setTitle] = useState('');
     const [category, setCategory] = useState('');
@@ -206,7 +206,7 @@ export function PostProduct({ navigation }) {
                         placeholder="Phone number (digits only)*"
                         placeholderTextColor={category ? "#000" : "#7d7d7d"}
                         keyboardType="numeric"
-                        value={phone}
+                        value={userInfo.phone}
                         onChangeText={setPhone}
                         editable={!!category}
                     />

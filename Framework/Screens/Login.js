@@ -11,6 +11,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { AppContext } from "../Components/GlobalVariables";
 import { useContext } from "react";
 import { authentication } from "../FireBase/Settings";
+import { Theme } from "../Components/Theme";
 
 const validation = yup.object({
     email: yup.string().email().min(7).required(),
@@ -49,6 +50,11 @@ export function Login({ navigation }) {
                             .catch(e => {
                                 setPreloader(false)
                                 console.log(e)
+                                Alert.alert(
+                                    "Error!",
+                                    errorMessage(e.code),
+                                    [{ text: "Try Again" }]
+                                )
                             })
                     }}
                     validationSchema={validation}
@@ -83,6 +89,9 @@ export function Login({ navigation }) {
                                     />
                                     <Text style={{ fontSize: 14, color: '#f95252', display: errors.password ? "flex" : "none" }}>{errors.password}</Text>
                                 </View>
+                                <TouchableOpacity onPress={() => navigation.navigate("ForgotPassword")}>
+                                    <Text style={{ fontSize: 16, color: 'white', margin: 10, fontFamily: Theme.fonts.text600 }}>Forgot Password?</Text>
+                                </TouchableOpacity>
                                 <View style={{ marginTop: 30 }}>
                                     <AppBotton onPress={() => handleSubmit()}>Log In</AppBotton>
                                 </View>
