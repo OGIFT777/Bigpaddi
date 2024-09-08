@@ -6,7 +6,7 @@ import { AppContext } from '../Components/GlobalVariables'
 import { Formik } from 'formik'
 import * as yup from "yup"
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { authentication } from '../FireBase/Settings'
+import { authentication } from '../FireBase/settings'
 import { sendPasswordResetEmail } from 'firebase/auth'
 
 

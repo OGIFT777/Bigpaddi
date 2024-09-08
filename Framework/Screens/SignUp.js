@@ -11,7 +11,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { AppContext } from "../Components/GlobalVariables";
 import { useContext } from "react";
-import { authentication, db } from "../FireBase/Settings";
+import { authentication, db } from "../FireBase/settings";
 
 const validation = yup.object({
     fname: yup.string().min(3).max(15).required(),

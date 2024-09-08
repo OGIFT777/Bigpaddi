@@ -9,6 +9,7 @@ import {
     StatusBar,
     StyleSheet,
     ScrollView,
+    TouchableOpacity,
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import Carousel from "react-native-reanimated-carousel";
@@ -18,8 +19,9 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { AppContext } from "../Components/GlobalVariables";
 import { PostProduct } from "./PostProduct";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../FireBase/Settings";
+import { collection, doc, getDoc, onSnapshot } from "firebase/firestore";
+import { formatMoney } from "../Components/FormatMoney";
+import { db } from "../FireBase/settings";
 const { height, width } = Dimensions.get("window");
 
 
@@ -99,40 +101,40 @@ const images = [
     },
 ];
 
-export const Home = () => {
-    const { setUserInfo, setPreloader, userUID } = useContext(AppContext)
+export const Home = ({ navigation }) => {
+    const { setUserInfo, userInfo, setPreloader, userUID, setDoc } = useContext(AppContext)
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [selected, setSelected] = useState(0);
 
     const getData = async () => {
-        try {
-            setLoading(true);
-            const res = await fetch("https://fakestoreapi.com/products");
-            if (res.ok) {
-                const data = await res.json();
-                setProducts(data);
-            } else {
-                console.error("Error fetching products. Status:", res.status);
-            }
-            setLoading(false);
-        } catch (error) {
-            console.error("Error fetching products", error);
-            setLoading(false);
-        }
+        onSnapshot(collection(db, 'products'), (snapshot) => {
+            const allData = []
+            snapshot.forEach(item => {
+                allData.push({ ...item.data(), docID: item.id })
+            })
+            setProducts(allData);
+            setPreloader(false)
+            // console.log(allData);
+        });
     };
 
     function getUser() {
         setPreloader(true)
-        getDoc(doc(db, "users", userUID))
-            .then(user => {
-                setPreloader(false);
-                setUserInfo(user.data())
-            })
-            .catch(e => {
-                console.log(e);
-                setPreloader(false);
-            })
+        // getDoc(doc(db, "users", userUID))
+        //     .then(user => {
+        //         setPreloader(false);
+        //         setUserInfo(user.data())
+        //     })
+        //     .catch(e => {
+        //         console.log(e);
+        //         setPreloader(false);
+        //     })
+        onSnapshot(doc(db, "users", userUID), (user) => {
+            setUserInfo(user.data())
+            setPreloader(false);
+
+        })
     }
 
 
@@ -160,7 +162,7 @@ export const Home = () => {
                             style={{ flexDirection: "row", gap: 2, alignItems: "center" }}
                         >
                             <Image
-                                source={require("../../assets/Logos/Designer3.png")}
+                                source={require("../../assets/jacket.jpg")}
                                 style={{ width: 26, height: 26 }}
                             />
                             <Text
@@ -176,25 +178,23 @@ export const Home = () => {
                         </View>
                         <View style={{ flexDirection: "row", gap: 12, marginRight: 9 }}>
                             <Pressable
-                                onPress={() => console.log("navigate to cart")}
+                                onPress={() => navigation.navigate("Cart")}
                                 style={{ position: "relative" }}
                             >
-                                <Text
-                                    style={{
-                                        backgroundColor: "red",
-                                        width: 10,
-                                        height: 10,
-                                        top: -0,
-                                        zIndex: 10,
-                                        borderRadius: 50,
-                                        right: -3,
-                                        fontSize: 12,
-                                        position: "absolute",
-                                        lineHeight: 12,
-                                        padding: 3,
-                                        color: "white",
-                                    }}
-                                ></Text>
+                                <View style={{
+                                    width: 15,
+                                    height: 15,
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    backgroundColor: "red",
+                                    top: -8,
+                                    zIndex: 10,
+                                    borderRadius: 50,
+                                    right: -8,
+                                    position: "absolute",
+                                }}>
+                                    <Text style={{ fontSize: 12, color: "white", }}>{userInfo.cart.length}</Text>
+                                </View>
                                 <Ionicons name="cart-outline" size={24} color="black" />
                             </Pressable>
                             <Pressable
@@ -309,73 +309,7 @@ export const Home = () => {
                         />
                     </View>
                 </View>
-                <View style={{ marginBottom: 10 }}>
-                    <View
-                        style={{
-                            backgroundColor: "white",
-                            padding: 8,
-                            borderRadius: 30,
-                            paddingVertical: 20,
-                            minHeight: 400,
-                        }}
-                    >
-                        <View
-                            style={{
-                                flexDirection: "row",
-                                justifyContent: "space-between",
-                                paddingRight: 4,
-                                alignItems: "center",
-                            }}
-                        >
-                            <View>
-                                <Text style={{ fontSize: 17, fontWeight: 500 }}>
-                                    Newly Arrived
-                                </Text>
-                                <Text style={{ fontSize: 10 }}>
-                                    Take a look from a variety of brands and companies
-                                </Text>
-                            </View>
-                            <Pressable onPress={() => console.log("clicked seemore")}>
-                                <Text style={{ fontSize: 10, color: Theme.colors.primary }}>
-                                    SEE MORE
-                                </Text>
-                            </Pressable>
-                        </View>
-                        <View>
-                            <View style={styles.container}>
-                                {loading ? (
-                                    <Text> Loading...</Text>
-                                ) : products && products?.length > 0 ? (
-                                    products.map((item, index) => (
-                                        <View key={index}>
-                                            <Image
-                                                source={{ uri: item.image }}
-                                                style={{ width: 120, height: 120, borderRadius: 10 }}
-                                            />
-                                            <Text
-                                                numberOfLines={1}
-                                                ellipsizeMode="tail"
-                                                style={{ maxWidth: 150 }}
-                                            >
-                                                {item.title}
-                                            </Text>
-                                            <Text style={{ fontWeight: 600, fontSize: 16 }}>
-                                                {format(item.price * 30)}
-                                            </Text>
-                                            <Text
-                                                style={{ fontWeight: 400, fontSize: 12, color: "gray", textTransform: "capitalize" }}
-                                            >
-                                                {item.category}
-                                            </Text>
-                                        </View>
-                                    ))
-                                ) : (
-                                    <Text>Refresh</Text>
-                                )}
-                            </View>
-                        </View>
-                    </View>
-                </View>
+
                 <View
                     style={{
                         marginBottom: 10,
@@ -435,29 +369,33 @@ export const Home = () => {
                                 {loading ? (
                                     <Text> Loading...</Text>
                                 ) : products && products?.length > 0 ? (
-                                    products.map((item, index) => (
-                                        <View key={index}>
-                                            <Image
-                                                source={{ uri: item.image }}
-                                                style={{ width: 120, height: 120, borderRadius: 10 }}
-                                            />
-                                            <Text
-                                                numberOfLines={1}
-                                                ellipsizeMode="tail"
-                                                style={{ maxWidth: 150 }}
-                                            >
-                                                {item.title}
-                                            </Text>
-                                            <Text style={{ fontWeight: 600, fontSize: 16 }}>
-                                                {format(item.price * 30)}
-                                            </Text>
-                                            <Text
-                                                style={{ fontWeight: 400, fontSize: 12, color: "gray", textTransform: "capitalize" }}
-                                            >
-                                                {item.category}
-                                            </Text>
-                                        </View>
-                                    ))
+                                    products.map((item, index) => {
+                                        return (
+                                            <TouchableOpacity style={styles.item} onPress={() => { setDoc(item); navigation.navigate("Details") }} key={index}>
+                                                <Image
+                                                    source={{ uri: item.image }}
+                                                    style={{ width: "100%", height: 150, borderRadius: 10 }}
+                                                />
+                                                <View style={{ padding: 5, flex: 1 }} >
+                                                    <Text
+                                                        numberOfLines={1}
+                                                        ellipsizeMode="tail"
+                                                        style={{}}
+                                                    >
+                                                        {item.title}
+                                                    </Text>
+                                                    <View>
+                                                        <Text style={{ fontWeight: 600, fontSize: 16 }}>{formatMoney(item.price)}</Text>
+                                                    </View>
+                                                    <Text
+                                                        style={{ fontWeight: 400, fontSize: 12, color: "gray", textTransform: "capitalize" }}
+                                                    >
+                                                        {item.category}
+                                                    </Text>
+                                                </View>
+                                            </TouchableOpacity>
+                                        )
+                                    })
                                 ) : (
                                     <Text>Refresh</Text>
                                 )}
@@ -476,15 +414,17 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: "row",
         flexWrap: "wrap",
-        rowGap: 20,
+        rowGap: 10,
         justifyContent: "space-between",
-        padding: 16,
+        padding: 15,
+        // flex: 1
     },
     item: {
         width: "49%",
-        marginVertical: 7,
-        padding: 16,
+        // marginVertical: 7,
+        // padding: 16,
         backgroundColor: "#f6f6f6",
+        borderRadius: 10
     },
 });
 

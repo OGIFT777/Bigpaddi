@@ -5,11 +5,14 @@ import { Login } from '../Screens/Login';
 import { Profile } from '../Screens/Profile';
 import { PostProduct } from '../Screens/PostProduct';
 import { Signup } from '../Screens/SignUp';
-import { MyProducts } from '../Screens/MyProduct';
+import { MyProducts, Product } from '../Screens/MyProduct';
 import { ChangePassword } from '../Screens/ChangePassword';
 import { ForgotPassword } from '../Screens/ForgotPassword';
 import { FundAccount } from '../Screens/FundAccount';
-import { Pay } from '../Screens/pay';
+import { Pay } from '../Screens/Pay';
+import { EditProfile } from '../Screens/EditProfile';
+import { Cart } from '../Screens/Cart';
+import { ProductA } from '../Screens/Product';
 
 const Stack = createStackNavigator();
 
@@ -27,6 +30,12 @@ export function StackNavigator() {
             <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
             <Stack.Screen name="FundAccount" component={FundAccount} />
             <Stack.Screen name="Pay" component={Pay} />
+            <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }}/>
+            <Stack.Screen name="Cart" component={Cart} options={{ headerShown: false }}/>
+            <Stack.Screen name="Details" component={ProductA} options={{ headerShown: false }}/>
+
+
+
 
 
 

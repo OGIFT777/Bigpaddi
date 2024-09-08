@@ -10,7 +10,7 @@ import * as yup from "yup"
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { AppContext } from "../Components/GlobalVariables";
 import { useContext } from "react";
-import { authentication } from "../FireBase/Settings";
+import { authentication } from "../FireBase/settings";
 import { Theme } from "../Components/Theme";
 
 const validation = yup.object({
@@ -36,7 +36,7 @@ export function Login({ navigation }) {
                 </View>
 
                 <Formik
-                    initialValues={{ email: "john@gmail.com", password: "password" }}
+                    initialValues={{ email: "Okosungift66@gmail.com", password: "password" }}
                     onSubmit={(values) => {
                         // console.log(values);
                         setPreloader(true)

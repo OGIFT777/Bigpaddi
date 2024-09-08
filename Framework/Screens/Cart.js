@@ -1,7 +1,14 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, View, Image, TouchableOpacity, FlatList, StatusBar } from 'react-native';
+import { formatMoney } from '../Components/FormatMoney';
+import { AppContext } from '../Components/GlobalVariables';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../FireBase/settings';
 
 export function Cart() {
+    const { userInfo, setPreloader, userUID } = useContext(AppContext)
+    const [cart, setCart] = useState([]);
+    const [fetchChanges, setfetchChanges] = useState(6687);
     const [cartItems, setCartItems] = useState([
         {
             id: 1,
@@ -23,19 +30,31 @@ export function Cart() {
         },
     ]);
 
-    const subtotal = cartItems.reduce((sum, item) => sum + item.price, 0);
+    const subtotal = cart.reduce((sum, item) => sum + Number(item.price), 0);
     const shipping = subtotal * 0.15;
     const total = subtotal + shipping;
 
-    const renderCartItem = ({ item }) => (
-        <View style={styles.cartItem}>
-            <Image source={{ uri: item.image }} style={styles.itemImage} />
-            {/* <View style={styles.itemDetails}> */}
-            <Text style={styles.itemName}>{item.name}</Text>
-            <Text style={styles.itemPrice}>${item.price}</Text>
-        </View>
-        // </View>
-    );
+    function getCartItem() {
+        userInfo.cart.map((item) => {
+            getDoc(doc(db, "products", item))
+                .then(response => {
+                    setCart(prev => [...prev, response.data()])
+                    setfetchChanges(Math.random())
+                })
+                .catch(e => console.log(e))
+        })
+    }
+
+    useEffect(() => {
+        getCartItem();
+        // console.log(cart);
+    }, [])
+
+    // useEffect(() => {
+    //     setCart(cart);
+    //     // console.log(cart);
+    // }, [fetchChanges])
+
 
     return (
         <SafeAreaView style={styles.container}>
@@ -51,13 +70,20 @@ export function Cart() {
             </View>
 
             <View style={styles.itemsCountContainer}>
-                <Text style={styles.itemsCount}>{cartItems.length} Items</Text>
+                <Text style={styles.itemsCount}>{userInfo.cart.length} Items</Text>
             </View>
 
             <FlatList
-                data={cartItems}
-                renderItem={renderCartItem}
-                keyExtractor={(item) => item.id.toString()}
+                data={cart}
+                renderItem={({ item }) => (
+                    <View style={styles.cartItem}>
+                        <Image source={{ uri: item.image }} style={styles.itemImage} />
+                        <Text style={styles.itemName}>{item.title}</Text>
+                        <Text style={styles.itemPrice}>${formatMoney(item.price)}</Text>
+                    </View>
+
+                )}
+                keyExtractor={(item) => item.createdAt.toString() + Math.random()}
                 contentContainerStyle={styles.cartList}
             />
 
@@ -140,7 +166,7 @@ const styles = StyleSheet.create({
         color: 'black',
         marginBottom: 4,
     },
-    
+
     itemImage: {
         width: 80,
         height: 80,

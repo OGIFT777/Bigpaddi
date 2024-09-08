@@ -5,7 +5,7 @@ import { useContext } from "react";
 import { Theme } from "../Components/Theme";
 // import { PAYSTACK_PUBLIC_KEY } from "../Firebase/APIkeys.key";
 import { AppContext } from "../Components/GlobalVariables";
-import { db } from "../FireBase/Settings";
+import { db } from "../FireBase/settings";
 
 export function Pay({ navigation, route }) {
     const { userUID, setPreloader, userInfo } = useContext(AppContext);

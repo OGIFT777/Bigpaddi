@@ -9,7 +9,8 @@ import { addDoc, collection } from 'firebase/firestore';
 import { AppContext } from '../Components/GlobalVariables';
 import { date } from 'yup';
 import { AppBotton } from '../Components/AppBotton';
-import { db } from '../FireBase/Settings';
+import { db } from '../FireBase/settings';
+import { launchImageLibraryAsync } from 'expo-image-picker';
 
 
 export function PostProduct({ navigation }) {
@@ -18,6 +19,7 @@ export function PostProduct({ navigation }) {
     const [title, setTitle] = useState('');
     const [category, setCategory] = useState('');
     const [description, setDescription] = useState('');
+    const [imageURL, setImageURL] = useState('');
     const [location, setLocation] = useState('');
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
@@ -108,7 +110,7 @@ export function PostProduct({ navigation }) {
             location,
             description,
             price,
-            image: null,
+            image: imageURL,
             phone,
             userId: userUID,
             createdAt: Date.now()
@@ -122,6 +124,17 @@ export function PostProduct({ navigation }) {
                 setPreloader(false)
             })
     }
+    const openGallery = async () => {
+        try {
+            const response = await launchImageLibraryAsync({ mediaType: 'photo' });
+
+            if (response?.assets && response.assets.length > 0) {
+                setImageURL(response.assets[0].uri);
+            }
+        } catch (error) {
+            console.log('Error opening gallery:', error);
+        }
+    };
 
     useEffect(() => {
         // console.log(userUID);
@@ -160,20 +173,16 @@ export function PostProduct({ navigation }) {
                     </TouchableOpacity>
 
 
-                    <Text style={{ color: '#7d7d7d', fontSize: 16, marginBottom: 10, }}>Add at least 1 photo</Text>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', }}>
-                        <View>{category && (
-                            <TouchableOpacity style={{ width: 100, height: 100, backgroundColor: '#323232', justifyContent: 'center', alignItems: 'center', borderRadius: 10, marginRight: 10, }} >
-                                <Text style={{ color: Theme.colors.primary, fontSize: 30, }}> +</Text>
-                            </TouchableOpacity>
-                        )}
-                        </View>
-                    </View>
-
                     <Text style={{ color: '#7d7d7d', fontSize: 12, marginTop: 10, }}>
                         a clear picture of the item you want to sell
                     </Text>
-
+                    <TextInput
+                        style={[styles.selectInput, !category && { backgroundColor: '#f0f0f0', borderWidth: 1, borderColor: '#323232', borderRadius: 5, padding: 15, marginBottom: 15, fontSize: 16, }]}
+                        placeholder="Image URL*"
+                        placeholderTextColor={category ? "#000" : "#7d7d7d"}
+                        value={imageURL}
+                        onChangeText={setImageURL}
+                    />
                     <TextInput
                         style={[styles.selectInput, !category && { backgroundColor: '#f0f0f0', borderWidth: 1, borderColor: '#323232', borderRadius: 5, padding: 15, marginBottom: 15, fontSize: 16, }]}
                         placeholder="Description*"
@@ -335,6 +344,21 @@ const styles = StyleSheet.create({
     },
     textInput: {
         color: "#000"
+    },
+    imageContainer: {
+        width: 200,
+        height: 200,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderColor: '#ddd',
+        borderWidth: 1,
+        borderRadius: 5,
+        overflow: 'hidden',
+    },
+    image: {
+        width: '100%',
+        height: '100%',
+        resizeMode: 'cover',
     },
     inputError: {
         borderWidth: 1, borderColor: '#323232', borderRadius: 5, padding: 15, marginBottom: 15, fontSize: 16,
