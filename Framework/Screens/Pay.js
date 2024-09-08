@@ -22,7 +22,7 @@ export function Pay({ navigation, route }) {
                 }}
                 onSuccess={() => {
                     updateDoc(doc(db, "users", userUID), {
-                        balance: amount + Number(userInfo.wallet)
+                        wallet: amount + Number(userInfo.wallet)
                     }).then(() => {
                         Alert.alert(
                             "Payment successful",
