@@ -43,7 +43,6 @@ export function FundAccount({ navigation }) {
                                 <View style={{ alignItems: "center" }}>
                                     <Image source={require("../../assets/user.png")} style={{ width: 300, height: 400, }} />
                                 </View>
-                                <Text style={styles.placeholder}>Please enter your account email, and a password reset link will be sent to your email.</Text>
                                 <Text style={styles.placeholder}>Fund amount</Text>
                                 <TextInput
                                     style={[styles.input, { marginBottom: 0 }]}
